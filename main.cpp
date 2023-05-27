@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include <windows.h>
-#include <time.h>
 #include <stdlib.h>
 #include <conio.h>
 #define W 15
 #define H 8
 using namespace std;
 
-int m[H][W+1] = {0, }, bx = 1, by = H/2;
-int ud = 1;
-
-void Make()
+int m[H][W+1] = {0, }, bx = 1, by = H/2, ud = 1;
+// board, player x, player y, obstacle position
+void Make() // make the obstacle
 {
     if(ud == 1) {
         for(int i = H; i >= H-rand()%3-2; i--){
@@ -27,7 +25,7 @@ void Make()
     return;
 }
 
-void Flow()
+void Flow() // scroll the board
 {
     for(int i = 0; i <= H; i++) {
         if(m[i][0] == 2) m[i][0] = 0;
@@ -41,12 +39,15 @@ void Flow()
 
 int main()
 {
-    int c = 100, s = 300, sid;
-    printf("PUT ANY NUMBER : ");
+    int c = 100, s, score = 0, sid;
+    // interval between obstacle, speed of the game, score, seed of rand;
+    printf("PUT ANY NUMBER\n");
     scanf("%d", &sid);
+    printf("PUT SPEED (1 == 1/1000sec)\n");
+    scanf("%d", &s);
     srand(sid);
-    system("color A");
-    while(m[by][bx] != 2) {
+    system("color A"); // green
+    while(m[by][bx] != 2) { // play the game
         system("cls");
         printf("PRESS A TO JUMP\n");
         m[by][bx] = 1;
@@ -66,12 +67,12 @@ int main()
             c = 0;
         }
         Flow();
-        printf("score : %d\n", 300-s);
-        Sleep(s--);
-        if(s == 100) s++;
-        if(by > H) break;
+        printf("score : %d\n", score++);
+        Sleep(s--); // make the game faster
+        if(s <= 1) s++;
+        if(by > H) break; // outside the board
     }
-    system("color 4");
+    system("color 4"); // red
     printf("GAME OVER");
     getch();
     return 0;
